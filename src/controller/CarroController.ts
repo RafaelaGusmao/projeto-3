@@ -87,4 +87,24 @@ export class CarroController extends Carro {
             return res.status(400).json({ mensagem: "Não foi possível cadastrar o carro. Entre em contato com o administrador do sistema." });
         }
     }
+
+    static async remover(req: Request, res: Response): Promise<Response> {
+        try {
+            const idCarro = parseInt(req.params.idCarro as string);
+
+            const repostaModelo = await Carro.removerCarro(idCarro);
+            
+         if(repostaModelo) {
+            return res.status(200).json({mensagem: "o carro foi removido com sucesso!"});
+         } else {
+            return res.status(400).json({ mensagem: "erro ao remover o carro.Entre em contato com o administrador do sistema."});
+         }
+        
+        } catch (error) {
+
+            console.log(`Erro ao remover um carro. ${error}`);
+
+            return res.status(400).json({mensagem: "Não foi possivel remeover o carro.Entre em contato com o administrador do sistema."});
+        }
+    }
 }

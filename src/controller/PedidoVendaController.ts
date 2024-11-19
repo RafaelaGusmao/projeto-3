@@ -63,4 +63,32 @@ export class PedidoVendaController extends PedidoVenda {
             return res.status(400).json({ mensagem: "Não foi possível cadastrar o Pedido de Venda. Entre em contato com o administrador do sistema." });
         }
     }
+
+    static async remover(req: Request, res: Response): Promise<Response> {
+        try {
+            // recuperar o ID do cliente a ser removido
+            const idPedidoVenda = parseInt(req.params.idPedidoVenda as string);
+
+            // chamar a função do modelo e armazenar a resposta
+            const repostaModelo = await PedidoVenda.removerPedidoVenda(idPedidoVenda);
+
+            // verifica se a reposta do modelo foi verdadeiro (true)
+            if(repostaModelo) {
+                // retorma um status 200 com uma mensagem de sucesso
+                return res.status(200).json({ mensagem: "O cliente foi removido com sucesso!"});
+            } else {
+                // retorna um status 400 com uma mensagem de erro
+                return res.status(400).json({ mensagem: "Erro ao remover o cliente. Entre em contato com o administrador do sistema." });
+            }
+
+        // trata qualquer erro que aconteça durante o processo
+        } catch (error) {
+            // lança uma mensagem de erro no console
+            console.log(`Erro ao remover um cliente. ${error}`);
+
+            // retorna uma mensagem de erro há quem chamou a mensagem
+            return res.status(400).json({ mensagem: "Não foi possível remover o cliente. Entre em contato com o administrador do sistema." });
+        }
+    }
 }
+
