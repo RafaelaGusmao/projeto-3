@@ -226,6 +226,7 @@ export class Carro {
             return false;
         }
     }
+    
     static async removerCarro(idCarro: number): Promise<boolean> {
         try{
             const queryDeleteCarro = `DELETE FROM carro WHERE id_carro = ${idCarro}`;
@@ -243,6 +244,39 @@ export class Carro {
         } catch (error) {
             console.log(`Erro ao remeover carro. Verifique os logs para mais detalhes.`);
             console.log(error);
+            return false;
+        }
+    }
+
+    static async atualizarCarro(carro: Carro): Promise<boolean> {
+        try {
+            // query para fazer update de um carro no banco de dados
+            const queryUpdateCarro = `UPDATE carro
+                                        SET marca = '${carro.getMarca()}', 
+                                            modelo = '${carro.getModelo()}', 
+                                            ano = ${carro.getAno()}, 
+                                            cor = '${carro.getCor()}'
+                                        WHERE id_carro = ${carro.getIdCarro()};`;
+
+            // executa a query no banco e armazena a resposta
+            const respostaBD = await database.query(queryUpdateCarro);
+
+            // verifica se a quantidade de linhas modificadas é diferente de 0
+            if (respostaBD.rowCount != 0) {
+                console.log(`Carro atualizado com sucesso! ID do carro: ${carro.getIdCarro()}`);
+                // true significa que a atualização foi bem sucedida
+                return true;
+            }
+            // false significa que a atualização NÃO foi bem sucedida.
+            return false;
+
+            // tratando o erro
+        } catch (error) {
+            // imprime outra mensagem junto com o erro
+            console.log('Erro ao atualizar o carro. Verifique os logs para mais detalhes.');
+            // imprime o erro no console
+            console.log(error);
+            // retorno um valor falso
             return false;
         }
     }

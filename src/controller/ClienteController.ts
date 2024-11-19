@@ -89,5 +89,43 @@ export class ClienteController extends Cliente {
             return res.status(400).json({ mensagem: "Não foi possível remover o cliente. Entre em contato com o administrador do sistema." });
         }
     }
-}
 
+    static async atualizar(req: Request, res: Response): Promise<Response> {
+        try {
+            // recuperando o id do carro que será atualizado
+            const idCliente = parseInt(req.query.id_carro as string);
+
+            // recuperando as informações do carro que serão atualizadas
+            const clienteRecebido: ClienteDTO = req.body;
+
+            // instanciando um objeto do tipo carro com as informações recebidas
+            const clienteAtualizado = new Cliente(clienteRecebido.nome,
+                clienteRecebido.cpf,
+                clienteRecebido.telefone,
+                
+        );
+
+            // setando o id do carro que será atualizado
+            clienteAtualizado.setIdCliente(idCliente);
+
+            // chamando a função de atualização de carro
+            const resposta = await Cliente.atualizarCliente(clienteAtualizado);
+
+            // verificando a resposta da função
+            if (resposta) {
+                // retornar uma mensagem de sucesso
+                return res.status(200).json({ mensagem: "Cliente atualizado com sucesso!" });
+            } else {
+                // retorno uma mensagem de erro
+                return res.status(400).json({ mensagem: "Erro ao atualizar o cliente. Entre em contato com o administrador do sistema." })
+            }
+        } catch (error) {
+            // lança uma mensagem de erro no console
+            console.log(`Erro ao atualizar um clinte. ${error}`);
+
+            // retorna uma mensagem de erro há quem chamou a mensagem
+            return res.status(400).json({ mensagem: "Não foi possível atualizar o cliente. Entre em contato com o administrador do sistema." });
+        }
+    }
+    
+}

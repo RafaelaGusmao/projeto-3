@@ -218,4 +218,37 @@ export class PedidoVenda {
             return false;
         }
     }
+
+    static async atualizarPedidoVenda(PedidoVenda: PedidoVenda): Promise<boolean> {
+        try {
+            // query para fazer update de um pedido no banco de dados
+            const queryUpdatePedido = `UPDATE carro
+                                        SET idCarro = '${PedidoVenda.getIdCarro()}', 
+                                            idCliente = '${PedidoVenda.getIdCliente()}', 
+                                            idPedido = '${PedidoVenda.getIdPedido()}',
+                                            valorPedido = '${PedidoVenda.getValorPedido}',
+                                        WHERE id_pedido = ${PedidoVenda.getIdPedido()};`;
+
+            // executa a query no banco e armazena a resposta
+            const respostaBD = await database.query(queryUpdatePedido);
+
+            // verifica se a quantidade de linhas modificadas é diferente de 0
+            if (respostaBD.rowCount != 0) {
+                console.log(`Pedido atualizado com sucesso! ID do carro: ${PedidoVenda.getIdPedido()}`);
+                // true significa que a atualização foi bem sucedida
+                return true;
+            }
+            // false significa que a atualização NÃO foi bem sucedida.
+            return false;
+
+            // tratando o erro
+        } catch (error) {
+            // imprime outra mensagem junto com o erro
+            console.log('Erro ao atualizar o pedido. Verifique os logs para mais detalhes.');
+            // imprime o erro no console
+            console.log(error);
+            // retorno um valor falso
+            return false;
+        }
+    }
 }
